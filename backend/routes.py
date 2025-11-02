@@ -46,12 +46,9 @@ def get_pictures():
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
     if data:
-        count = 1
         for x in data:
-            if count == id:
+            if x["id"] == id:
                 return jsonify(x), 200
-            else:
-                count += 1
         
         return {'Message': 'Not Found'}, 404
 
@@ -114,6 +111,12 @@ def update_picture(id):
     try:
         for x in data:
             if x['id'] == pic['id']:
+                x['id'] = pic['id']
+                x['pic_url'] = pic['pic_url']
+                x['event_country'] = pic['event_country']
+                x['event_state'] = pic['event_state']
+                x['event_city'] = pic['event_city']
+                x['event_date'] = pic['event_date']
                 return jsonify(x), 200
         return {"message": "picture not found"}, 404
     except NameError:
@@ -125,4 +128,10 @@ def update_picture(id):
 ######################################################################
 @app.route("/picture/<int:id>", methods=["DELETE"])
 def delete_picture(id):
-    pass
+     if data:
+        for x in data:
+            if x['id'] == id:
+                data.remove(x)
+                return {'Message': ''}, 204
+        
+        return {'Message': 'picture not Found'}, 404
